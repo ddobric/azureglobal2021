@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DurableOne", "DurableOne\DurableOne.csproj", "{CEB48613-3F67-4836-B9C6-76C150DD4D78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerConsole", "DockerConsole\DockerConsole.csproj", "{4F3C7842-5AF3-4EF6-B54F-2F0B7038CD8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DockerConsole", "DockerConsole\DockerConsole.csproj", "{4F3C7842-5AF3-4EF6-B54F-2F0B7038CD8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

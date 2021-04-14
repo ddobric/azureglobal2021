@@ -61,7 +61,7 @@ namespace DurableOne
             return $"Hello {name}!";
         }
 
-        [FunctionName("Function1_HttpStart")]
+        [FunctionName("RunOrchestrationFunction")]
         public static async Task<HttpResponseMessage> HttpStart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestMessage req,
             [DurableClient] IDurableOrchestrationClient starter,
