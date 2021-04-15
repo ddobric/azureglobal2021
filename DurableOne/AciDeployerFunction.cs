@@ -118,6 +118,19 @@ namespace DurableOne
                     throw deployTask?.Exception;
                 }
 
+                if (containerGroup?.State == "Succeeded" || containerGroup?.State == "Stopped")
+                {
+                    logger.LogInformation("Restarting the container group");
+
+                    ContainerGroupsOperationsExtensions.StartAsync(containerGroup.Manager.Inner.ContainerGroups,
+                                               containerGroup.ResourceGroupName,
+                                               containerGroup.Name).Wait();
+
+                    containerGroup = azure.ContainerGroups.GetByResourceGroup(args.ResourceGroupName, args.ContainerGroupName);
+
+                    logger.LogInformation("The container group restarted");                    
+                }
+
                 //
                 // Here we waiting on the container to complete running state.
                 while (containerGroup?.State == "Pending" || containerGroup?.State == "Running" && deployTask?.Exception == null)

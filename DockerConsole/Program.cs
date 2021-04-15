@@ -7,7 +7,7 @@ namespace DockerConsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello Docker console!");
+            Console.WriteLine("Hello Docker console v2 :)");
 
             var a1 = Environment.GetEnvironmentVariable("Arg1");
             var a2 = Environment.GetEnvironmentVariable("Arg2");
