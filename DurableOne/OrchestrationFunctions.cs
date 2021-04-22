@@ -31,7 +31,7 @@ namespace DurableOne
           [OrchestrationTrigger] IDurableOrchestrationContext context)
         {
             var tasks = new Task<string>[3];
-
+            
             var outputs = new List<string>();
 
             // Replace "hello" with the name of your Durable Activity Function.
@@ -63,12 +63,16 @@ namespace DurableOne
 
         [FunctionName("RunOrchestrationFunction")]
         public static async Task<HttpResponseMessage> HttpStart(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestMessage req,
-            [DurableClient] IDurableOrchestrationClient starter,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "{pattern}")] HttpRequestMessage req,
+            [DurableClient] IDurableOrchestrationClient starter, string pattern,
             ILogger log)
         {
-            // Function input comes from the request content.
-            string instanceId = await starter.StartNewAsync("Function2", null);
+            string instanceId;
+
+            if (pattern == "fanout")
+                instanceId = await starter.StartNewAsync("Function2", null);
+            else
+                instanceId = await starter.StartNewAsync("Function1", null);
 
             log.LogInformation($"Started orchestration with ID = '{instanceId}'.");
 
