@@ -21,7 +21,8 @@ namespace DurableOne
     {
 
         /// <summary>
-        /// 
+        /// Deploys the container to ACI.
+        /// It triggers the azure function function 'DeployImageToAciTask' (durable task) that starts deploying process to ACI.
         /// </summary>
         /// <param name="context"></param>
         /// <param name="log"></param>
@@ -113,11 +114,16 @@ namespace DurableOne
                     SdkContext.DelayProvider.Delay(1000);
                 }
 
+                //
+                // Here we check if some error ocurred during deployment.
                 if (deployTask?.Exception != null)
                 {
                     throw deployTask?.Exception;
                 }
 
+                //
+                // This will be entered if the same instance was already deployed, before we started depployment again.
+                // In that case we need to restart the group.
                 if (containerGroup?.State == "Succeeded" || containerGroup?.State == "Stopped")
                 {
                     logger.LogInformation("Restarting the container group");

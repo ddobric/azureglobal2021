@@ -11,8 +11,8 @@
         public string RegistryUsername { get;  set; }
         public string RegistryPassword { get;  set; }
         public string ContainerImage { get;  set; }
-        public double CpuCoreCount { get;  set; }
-        public double MemorySizeInGB { get;  set; }
+        public int CpuCoreCount { get;  set; }
+        public int MemorySizeInGB { get;  set; }
         public string TransactionId { get;  set; }
         public string ClientId { get; set; }
         public string Secret { get; set; }
