@@ -53,7 +53,7 @@ namespace DurableOne
             }
 
             public void Delete()
-            {
+            {   
                 Entity.Current.DeleteState();
             }
         }
@@ -64,7 +64,7 @@ namespace DurableOne
 
         [FunctionName("CounterEntity")]
         public static async Task<HttpResponseMessage> CounterEntity(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Counter/{method}/{key}/{input}")] HttpRequestMessage req,
+           [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "Counter/{method}/{key}/{input}")] HttpRequestMessage req,
            [DurableClient] IDurableEntityClient client, ILogger log, string method = "get", string key = null, string input = null
            )
         {
