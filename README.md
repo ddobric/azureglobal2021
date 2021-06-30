@@ -15,4 +15,4 @@ Demonstrates how to run a looping orchestration that can be used for polling sce
 Demonstrates how ro use a durable entities to implement actor model. Sample implements a *Counter* entity  as an actor.
 
 ## Driving Image Deployment in ACI
-This sample demonstrates how to use the Azure Management Fluent API to deploy a docker image to the an Azure Container Instances service.
+This sample demonstrates how to use the Azure Management Fluent API to deploy a docker image to the Azure Container Instances service.
