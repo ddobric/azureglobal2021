@@ -25,7 +25,7 @@ namespace DurableOne
             var outputs = new List<string>();
 
             // Replace "hello" with the name of your Durable Activity Function.
-            outputs.Add(await context.CallActivityAsync<string>("ExecuteJob", "Tokyo"));
+            outputs.Add(await context.CallActivityAsync<string>("ExecuteJob", "Frankfurt"));
 
             counter++;
 
@@ -33,7 +33,7 @@ namespace DurableOne
 
             counter++;
 
-            outputs.Add(await context.CallActivityAsync<string>("ExecuteJob", "London"));
+            outputs.Add(await context.CallActivityAsync<string>("ExecuteJob", "Sarajevo"));
 
             return outputs;
         }
