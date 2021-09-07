@@ -1,0 +1,19 @@
+{
+  "Arg1": "Some Arg 1",
+  "Arg2": "Some Arg 2",
+  "ResourceGroupName": "RG-DEMO",
+  "ContainerGroupName": "dwxdemo",
+  "RegistryServer": "***.azurecr.io",
+  "RegistryUsername": "****",
+  "RegistryPassword": "***",
+  "ContainerImage": "***.azurecr.io/dockerconsole:latest",
+  "CpuCoreCount": 1,
+  "MemorySizeInGB": 1,
+  "TransactionId": "daenet GmbH demo",
+
+  "ClientId": "***",
+  "Secret": "***",
+
+  "SubscriptionId": "***",
+  "TenantId": "***"
+}

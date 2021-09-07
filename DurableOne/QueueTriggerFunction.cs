@@ -13,14 +13,14 @@ namespace DurableOne
         [FunctionName("QueueTriggerFunction")]
         public static async Task Run([QueueTrigger("deployimage", Connection = "AzureWebJobsStorage")] string message,
             ILogger log,
-            [DurableClient] IDurableOrchestrationClient starter)
+            [DurableClient] IDurableOrchestrationClient orchestrationClient)
         {
             log.LogInformation($"Message Received: {message}");
 
             var args = JsonConvert.DeserializeObject<StartImageParams>(message);
 
-            // Function input comes from the request content.
-            string instanceId = await starter.StartNewAsync("DeployImageToAci", args);
+            // Runs the orchestration.
+            string instanceId = await orchestrationClient.StartNewAsync("DeployContainerOrchestration", args);
 
         }
     }

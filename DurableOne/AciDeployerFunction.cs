@@ -19,6 +19,28 @@ namespace DurableOne
 {
     public static class DeployerFunction
     {
+
+        /// <summary>
+        /// Deploys the container to ACI.
+        /// It triggers the azure function function 'DeployImageToAciTask' (durable task) that starts deploying process to ACI.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="log"></param>
+        /// <returns></returns>
+        [FunctionName("DeployContainerOrchestration")]
+        public static async Task<string> DeployContainerOrchestration([OrchestrationTrigger]
+        IDurableOrchestrationContext context, ILogger log)
+        {
+            StartImageParams startParams = context.GetInput<StartImageParams>();
+
+            log.LogInformation($"{nameof(DeployContainerOrchestration)} started with TransactionId: {startParams.TransactionId} and InstanceId: {context.InstanceId}");
+
+            // Runs the deployment activity.
+            var output = await context.CallActivityAsync<string>("DeployImageToAciTask", startParams);
+
+            return output;
+        }
+
         /// <summary>
         /// Creates a container group with a single container asynchronously, and
         /// polls its status until its state is 'Running'.
@@ -30,12 +52,12 @@ namespace DurableOne
         /// <remarks>
         /// https://github.com/Azure-Samples/aci-docs-sample-dotnet/blob/master/Program.
         /// </remarks>
-        [FunctionName("DeployImageToAci")]
-        public static string DeployImageToAci([ActivityTrigger] StartImageParams args, ILogger logger)
+        [FunctionName("DeployImageToAciTask")]
+        public static string DeployImageToAciTask([ActivityTrigger] StartImageParams args, ILogger logger)
         {
             logger.LogInformation($"Creating container group '{args.Arg1}'...");
 
-            IAzure azure = GetEnvironment();
+            IAzure azure = GetEnvironment(args);
 
             // Get the resource group's region
             IResourceGroup resGroup = azure.ResourceGroups.GetByName(args.ResourceGroupName);
@@ -68,7 +90,7 @@ namespace DurableOne
                            .WithMemorySizeInGB(args.MemorySizeInGB)
                            //.WithVolumeMountSetting("valumeshare", "/cpdm/logs")
                            .WithEnvironmentVariable("Arg1", args.Arg1)
-                           .WithEnvironmentVariable("Arg2", args.Arg2)                           
+                           .WithEnvironmentVariable("Arg2", args.Arg2)
                            .Attach()
                        //.WithDnsPrefix(args.ContainerGroupName)
                        .WithRestartPolicy(ContainerGroupRestartPolicy.Never)
@@ -80,9 +102,9 @@ namespace DurableOne
 
             var waitTask = Task.Run(() =>
             {
-            //
-            // Here we are waiting on container to be deployed into ACI.
-            IContainerGroup containerGroup = null;
+                //
+                // Here we are waiting on container to be deployed into ACI.
+                IContainerGroup containerGroup = null;
                 while ((containerGroup == null && deployTask?.Exception == null) || (containerGroup != null && containerGroup.State == null))
                 {
                     containerGroup = azure.ContainerGroups.GetByResourceGroup(args.ResourceGroupName, args.ContainerGroupName);
@@ -92,14 +114,32 @@ namespace DurableOne
                     SdkContext.DelayProvider.Delay(1000);
                 }
 
+                //
+                // Here we check if some error ocurred during deployment.
                 if (deployTask?.Exception != null)
                 {
                     throw deployTask?.Exception;
                 }
 
-            //
-            // Here we waiting on the container to complete running state.
-            while (containerGroup?.State == "Pending" || containerGroup?.State == "Running" && deployTask?.Exception == null)
+                //
+                // This will be entered if the same instance was already deployed, before we started depployment again.
+                // In that case we need to restart the group.
+                if (containerGroup?.State == "Succeeded" || containerGroup?.State == "Stopped")
+                {
+                    logger.LogInformation("Restarting the container group");
+
+                    ContainerGroupsOperationsExtensions.StartAsync(containerGroup.Manager.Inner.ContainerGroups,
+                                               containerGroup.ResourceGroupName,
+                                               containerGroup.Name).Wait();
+
+                    containerGroup = azure.ContainerGroups.GetByResourceGroup(args.ResourceGroupName, args.ContainerGroupName);
+
+                    logger.LogInformation("The container group restarted");                    
+                }
+
+                //
+                // Here we waiting on the container to complete running state.
+                while (containerGroup?.State == "Pending" || containerGroup?.State == "Running" && deployTask?.Exception == null)
                 {
                     logger.LogInformation($"tId: {args.TransactionId} - {args.ContainerGroupName} state: {containerGroup.Refresh().State}");
 
@@ -133,16 +173,16 @@ namespace DurableOne
             return "This should never be returned.";
         }
 
-        public static IAzure GetEnvironment()
+        public static IAzure GetEnvironment(StartImageParams args)
         {
             ServicePrincipalLoginInformation principal = new ServicePrincipalLoginInformation()
             {
-                ClientId = Environment.GetEnvironmentVariable("ClientId"),
-                ClientSecret = Environment.GetEnvironmentVariable("ClientSecret"),
+                ClientId = args.ClientId,
+                ClientSecret = args.Secret,
             };
 
-            AzureCredentials azureCredential = new AzureCredentials(principal, Environment.GetEnvironmentVariable("TenantId"), AzureEnvironment.AzureGlobalCloud);
-            IAzure azure = Microsoft.Azure.Management.Fluent.Azure.Authenticate(azureCredential).WithSubscription(Environment.GetEnvironmentVariable("SubscriptionId"));
+            AzureCredentials azureCredential = new AzureCredentials(principal, args.TenantId, AzureEnvironment.AzureGlobalCloud);
+            IAzure azure = Microsoft.Azure.Management.Fluent.Azure.Authenticate(azureCredential).WithSubscription(args.SubscriptionId);
 
             return azure;
         }

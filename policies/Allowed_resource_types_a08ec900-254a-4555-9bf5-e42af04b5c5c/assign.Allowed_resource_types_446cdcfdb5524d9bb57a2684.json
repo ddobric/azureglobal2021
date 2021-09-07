@@ -1,0 +1,71 @@
+{
+ "sku": {
+  "name": "A0",
+  "tier": "Free"
+ },
+ "identity": {
+  "principalId": "023ac4fb-1109-4e91-b70a-efcf6117ee48",
+  "tenantId": "b1f2074d-dc55-43dc-be8e-9311da2845b5",
+  "type": "SystemAssigned"
+ },
+ "properties": {
+  "displayName": "Allowed resource types",
+  "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/a08ec900-254a-4555-9bf5-e42af04b5c5c",
+  "scope": "/subscriptions/734697c3-2595-49c7-808d-1f84a179b9a6",
+  "notScopes": [],
+  "parameters": {
+   "listOfResourceTypesAllowed": {
+    "value": [
+     "microsoft.sql/servers",
+     "microsoft.sql/servers/databases",
+     "microsoft.sql/checknameavailability",
+     "microsoft.sql/instancepools",
+     "microsoft.sql/locations",
+     "microsoft.sql/locations/administratorazureasyncoperation",
+     "microsoft.sql/locations/administratoroperationresults",
+     "microsoft.sql/locations/auditingsettingsazureasyncoperation",
+     "microsoft.sql/locations/auditingsettingsoperationresults",
+     "microsoft.sql/locations/capabilities",
+     "microsoft.sql/locations/databaseazureasyncoperation",
+     "microsoft.sql/locations/databaseoperationresults",
+     "microsoft.sql/locations/databaserestoreazureasyncoperation",
+     "microsoft.sql/locations/deletevirtualnetworkorsubnets",
+     "microsoft.sql/locations/deletevirtualnetworkorsubnetsazureasyncoperation",
+     "microsoft.sql/locations/deletevirtualnetworkorsubnetsoperationresults",
+     "microsoft.sql/locations/devopsauditingsettingsazureasyncoperation",
+     "microsoft.sql/locations/devopsauditingsettingsoperationresults",
+     "microsoft.sql/locations/dnsaliasasyncoperation",
+     "microsoft.sql/locations/dnsaliasoperationresults",
+     "microsoft.sql/locations/elasticpoolazureasyncoperation",
+     "microsoft.sql/locations/elasticpooloperationresults",
+     "microsoft.sql/locations/encryptionprotectorazureasyncoperation",
+     "microsoft.sql/locations/encryptionprotectoroperationresults",
+     "microsoft.sql/locations/extendedauditingsettingsazureasyncoperation",
+     "microsoft.sql/locations/extendedauditingsettingsoperationresults",
+     "microsoft.sql/locations/failovergroupazureasyncoperation",
+     "microsoft.sql/locations/failovergroupoperationresults",
+     "microsoft.sql/locations/firewallrulesazureasyncoperation",
+     "microsoft.sql/locations/firewallrulesoperationresults",
+     "microsoft.sql/locations/importexportazureasyncoperation",
+     "microsoft.sql/locations/importexportoperationresults",
+     "microsoft.sql/locations/instancefailovergroupazureasyncoperation"
+    ]
+   }
+  },
+  "metadata": {
+   "assignedBy": "Damir Dobric",
+   "parameterScopes": {
+    "listOfResourceTypesAllowed": "/subscriptions/734697c3-2595-49c7-808d-1f84a179b9a6"
+   },
+   "createdBy": "c99539da-7db5-4a6c-a336-85e4910fd201",
+   "createdOn": "2021-04-19T16:31:17.8468466Z",
+   "updatedBy": null,
+   "updatedOn": null
+  },
+  "enforcementMode": "Default"
+ },
+ "id": "/subscriptions/734697c3-2595-49c7-808d-1f84a179b9a6/providers/Microsoft.Authorization/policyAssignments/446cdcfdb5524d9bb57a2684",
+ "type": "Microsoft.Authorization/policyAssignments",
+ "name": "446cdcfdb5524d9bb57a2684",
+ "location": "eastus"
+}
