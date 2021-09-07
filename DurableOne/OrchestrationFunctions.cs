@@ -12,13 +12,13 @@ namespace DurableOne
 {
     public static class AciDeployerFunction
     {
-        public static int Counter { get; set; } = 0;
+        public static int counter { get; set; } = 0;
 
         [FunctionName("OrchestrationWithSequence")]
         public static async Task<List<string>> OrchestrationWithSequence(
               [OrchestrationTrigger] IDurableOrchestrationContext context)
         {
-            int counter = 0;
+            //int counter = 0;
 
             var input = context.GetInput<string>();
 
@@ -126,7 +126,7 @@ namespace DurableOne
 
             if (pattern == "fanout")
                 instanceId = await starter.StartNewAsync<string>("OrchestrationWithFanOut", "42");
-            if (pattern == "loop")
+            else if (pattern == "loop")
                 instanceId = await starter.StartNewAsync<State>("OrchestrationLoop", new State {  Counter = 0, Delay = 5});
             else
                 instanceId = await starter.StartNewAsync<string>("OrchestrationWithSequence", "42");
