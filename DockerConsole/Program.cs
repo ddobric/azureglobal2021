@@ -7,7 +7,7 @@ namespace DockerConsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello Docke console!");
+            Console.WriteLine("Hello Docker console!");
 
             for (int i = 0; i < 100; i++)
             {
