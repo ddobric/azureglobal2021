@@ -10,7 +10,7 @@ namespace DurableOne
 {
     public static class QueueTriggerFunction
     {
-        [FunctionName("QueueTriggerFunction")]
+        [FunctionName("ContainerOrchestratorQueueTriggerFunction")]
         public static async Task Run([QueueTrigger("deployimage", Connection = "AzureWebJobsStorage")] string message,
             ILogger log,
             [DurableClient] IDurableOrchestrationClient orchestrationClient)

@@ -7,7 +7,7 @@ namespace DockerConsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello Docker console v4 :)");
+            Console.WriteLine("Hello Docker console v1 :)");
 
             var a1 = Environment.GetEnvironmentVariable("Arg1");
             var a2 = Environment.GetEnvironmentVariable("Arg2");
@@ -16,7 +16,7 @@ namespace DockerConsole
 
             for (int i = 0; i < 100; i++)
             {
-                Thread.Sleep(2000);
+                Thread.Sleep(1000);
 
                 Console.WriteLine(i);
             }
